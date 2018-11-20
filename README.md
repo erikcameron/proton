@@ -1,6 +1,45 @@
 # Proton
 
-A tool for data reuse, I guess? Stand by.
+A tool for data structure reuse. Or something. Easier to just illustrate.
+Suppose you need some relatively complex map, say as a slice of application
+state:
+
+```
+pizza = %{
+  size: "large",
+  verticality: "deep",
+  crust: "cornmeal",
+  sauce: "tomato",
+  toppings: [
+    %{name: "spinach", extra: 0},
+    %{name: "giardiniera", spiciness: "hot", half: "left"}
+  ],
+  order: %{
+    type: "pickup",
+    placed_at: "19:30PM CST"
+    customer: "Erik"
+  }
+```
+
+Suppose you want to specify a bunch of these that share many things
+but also diverge in many particulars. Rather than writing that sort
+of thing over and over, it would be easier and more resistant to 
+errors and the ravages of time if you could just do this:
+
+```
+%{
+  protos: ["large_spinach_deep_dish", "cornmeal_crust"]
+  toppings: ["spinach"
+    
+     
+
+
+##
+
+To do:
+  - `proton_test`, esp. children nodes 
+  - documentation updates
+  - ...
 
 ## Installation
 

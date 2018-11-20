@@ -8,7 +8,7 @@ defmodule Proton do
   def build(literal, _) when is_map(literal), do: literal
   def build(path, source) when is_binary(path) do
     with {:ok, first_pass_sources } <- expand(path, &source.resolve/1),
-      {:ok, first_pass_merged } <- List.foldl(first_pass_sources, %{}, &smart_merge/2),
+      {:ok, first_pass_merged } <- merge_sources(first_pass_sources),
       {:ok, fully_merged } <- build_children(first_pass_merged, source), 
       {:ok, filtered} <- filter(fully_merged, source),
       {:ok, checked} <- check(filtered, source)
@@ -26,10 +26,19 @@ defmodule Proton do
     end
   end
 
+  defp merge_sources(sources) do
+    merged_sources = sources
+    |> List.flatten
+    |> Enum.reverse
+    |> List.foldl(%{}, &smart_merge/2)
+    {:ok, merged_sources}
+  end
+
   defp build_children(spec, source) do
     for f <- child_fields(source), is_list(spec[f]), into: spec do
       {f, Enum.map(spec[f], fn child -> build(child, f) end)}
     end
+    {:ok, spec}
   end
 
   defp child_fields(source) do
