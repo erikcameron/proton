@@ -6,10 +6,10 @@ defmodule Proton do
   import Proton.Merger, only: [smart_merge: 2]
 
   def build(literal, _) when is_map(literal), do: literal
-  def build(path, source) when is_binary(path) do
+  def build(path, source) when is_tuple(path) do
     with {:ok, first_pass_sources } <- expand(path, &source.resolve/1),
       {:ok, first_pass_merged } <- merge_sources(first_pass_sources),
-      {:ok, fully_merged } <- build_children(first_pass_merged, source), 
+      {:ok, fully_merged } <- build_children(first_pass_merged, path, source), 
       {:ok, filtered} <- filter(fully_merged, source),
       {:ok, checked} <- check(filtered, source)
     do
@@ -34,20 +34,19 @@ defmodule Proton do
     {:ok, merged_sources}
   end
 
-  defp build_children(spec, source) do
-    for f <- child_fields(source), is_list(spec[f]), into: spec do
-      {f, Enum.map(spec[f], fn child -> build(child, f) end)}
+  defp build_children(spec, {kind, _}, source) do
+    for f <- child_fields(source, kind), is_list(spec[String.to_atom(f)]), into: spec do
+      {f, Enum.map(spec[String.to_atom(f)], fn child -> build({f, child}, source) end)}
     end
     {:ok, spec}
   end
 
-  defp child_fields(source) do
-    case Kernel.function_exported?(source, :children, 0) do
-      true -> source.children
+  defp child_fields(source, kind) do
+    case Kernel.function_exported?(source, :children, 1) do
+      true -> source.children(kind)
       false -> []
     end
   end
-
 
   defp filter(spec, source) do
     case Kernel.function_exported?(source, :filter, 1) do

@@ -34,14 +34,15 @@ defmodule Proton.Expander do
   end
 
   defp _expand!(path, resolver, current_paths) do
+    {kind, handle} = path
     case Enum.member?(current_paths, path) do
       true ->  
-        raise PrototypeRegress, message: path
+        raise PrototypeRegress, message: "#{handle} (#{kind})"
       false ->
         Enum.map(proto_list(resolver.(path)), fn p -> 
           case p do
             p when is_map(p) -> p
-            p when is_binary(p) -> _expand!(p, resolver, [path | current_paths])
+            p when is_binary(p) -> _expand!({kind, p}, resolver, [path | current_paths])
             _ -> raise InvalidPrototypeType, message: inspect(p)
           end
       end)
