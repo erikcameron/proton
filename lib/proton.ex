@@ -7,7 +7,7 @@ defmodule Proton do
 
   def build(literal, _) when is_map(literal), do: literal
   def build(path, source) when is_tuple(path) do
-    with {:ok, first_pass_sources } <- expand(path, &source.resolve/1),
+    with {:ok, expanded_sources } <- expand(path, &source.resolve/1),
       {:ok, first_pass_merged } <- merge_sources(first_pass_sources),
       {:ok, fully_merged } <- build_children(first_pass_merged, path, source), 
       {:ok, filtered} <- filter(fully_merged, source),
