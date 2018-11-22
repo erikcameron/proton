@@ -4,7 +4,7 @@ A tool for data structure reuse. Or something. Easier to just illustrate.
 Suppose you need some relatively complex map, say as a slice of application
 state:
 
-```
+```elixir
 pizza = %{
   size: "large",
   verticality: "deep",
@@ -26,20 +26,36 @@ but also diverge in many particulars. Rather than writing that sort
 of thing over and over, it would be easier and more resistant to 
 errors and the ravages of time if you could just do this:
 
-```
+```elixir
 %{
-  protos: ["large_spinach_deep_dish", "cornmeal_crust"]
-  toppings: ["spinach"
+  protos: ["spinach_deep_dish", "size_large", "cornmeal_crust"]
+  toppings: ["spinach", "giardiniera"]
+  order: %{
+    type: "pickup",
+    placed_at: "19:30PM CST"
+    customer: "Erik"
+  }
+}
+```
+
+Here `protos` is shorthand for "prototypes": i.e., data that we 
+want to pull in, include, etc. Proton will expand those names into
+actual maps, (along with any prototypes _they_ specify) flatten the
+list, and merge them into a single data structure for you. The benefits
+are:
+
+- Encapsulation: The first example above, where the pizza order is
+given as one big map literal, exposes the implementation of your
+pizza machinery because it exposes the raw data it consumes. What if
+you want to change formats, definitions, etc.?
+
+- DRY: You probably sell a lot of deep dish spinach pizzas, and 
+don't want to have to write it out each time.
+
+- Extension/recombination: For all you know, `"spinach_deep_dish"` 
+resolves to `["spinach", "deep_dish"]`
     
-     
-
-
-##
-
-To do:
-  - `proton_test`, esp. children nodes 
-  - documentation updates
-  - ...
+And so on. Stay tuned for more examples from real world use.
 
 ## Installation
 
