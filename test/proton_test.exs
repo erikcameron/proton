@@ -144,7 +144,4 @@ defmodule ProtonTest do
     {:error, %CheckFailed{} = reason} = Proton.build("local_node", CheckFailedWithErrorsSource)
     assert reason.errors == CheckFailedWithErrorsSource.error_list
   end
-
-
-
 end

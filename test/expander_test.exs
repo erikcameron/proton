@@ -23,7 +23,6 @@ defmodule ProtonTest.Expander do
     invalid: %{protos: [1, 2, 3]}
   }
 
-
   def find!(path) when is_binary(path), do: @repo[String.to_atom(path)]
 
   test "leaves map literals alone" do

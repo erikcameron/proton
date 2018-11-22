@@ -36,7 +36,7 @@ defmodule Proton.Expander do
   defp _expand!(path, finder, current_paths) do
     case Enum.member?(current_paths, path) do
       true ->  
-        raise PrototypeRegress, message: path
+        raise PrototypeRegress, message: inspect(path)
       false ->
         case finder.(path) do
           spec when is_map(spec) -> 
