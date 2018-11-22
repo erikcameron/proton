@@ -4,14 +4,12 @@ defmodule Proton.Source do
   in order to use Proton. 
   """
 
-  alias Proton.Errors.CheckFailed
+  @type path  :: any
+  @type spec  :: map()
+  @type error :: any
 
-  @type path :: String.t
-  @type spec :: map()
-
-  @callback resolve(path) :: spec
-  @callback children() :: [atom]
-  @callback filter(spec) :: spec
-  @callback checker(spec) :: {:ok, spec} | {:error, %CheckFailed{}}
-  @optional_callbacks children: 0, filter: 1, checker: 1
+  @callback find!(path)  :: spec
+  @callback filter(spec) :: {:ok, spec} | {:error, error}
+  @callback check(spec)  :: {:ok, spec} | {:error, error}
+  @optional_callbacks filter: 1, check: 1
 end
