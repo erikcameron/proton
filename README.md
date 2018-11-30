@@ -29,7 +29,7 @@ errors and the ravages of time if you could just do something like this:
 ```elixir
 %{
   protos: ["spinach_deep_dish", "size_large", "cornmeal_crust"]
-  toppings: ["spinach", "left-hot-giardiniera"]
+  extras: ["left-hot-giardiniera"]
   order: %{
     type: "pickup",
     placed_at: "19:30PM CST"
@@ -38,12 +38,15 @@ errors and the ravages of time if you could just do something like this:
 }
 ```
 
-Here `protos` is shorthand for "prototypes": i.e., data that we
-want to pull in, include, etc. Proton will expand those names into
-actual maps, (along with any prototypes _they_ specify) flatten the
-list, and merge them into a single data structure for you. 
+Note how we specify all of the _real_ particulars of this order
+(customer, time, etc.) and pull in the rest attribute-by-attribute
+from other sources.  Here `protos` is shorthand for "prototypes":
+i.e., data that we want to pull in, include, etc. Proton will expand
+those names into actual maps, (along with any prototypes _they_
+specify) flatten the list, and merge them into a single data structure
+for you.
 
-Note: "Toppings" works that way too in this example, like a one-to-many
+Note: "extras" works that way too in this example, like a one-to-many
 relationship, though you'll have to expand those explicitly; Proton
 doesn't handle that for you. It's just a significant enough part
 of all the real world use cases I've come up with that it seemed
