@@ -84,7 +84,7 @@ by adding `proton` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:proton, "~> 0.1.0"}
+    {:proton, "~> 0.2.0"}
   ]
 end
 ```
