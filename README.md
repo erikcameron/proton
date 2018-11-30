@@ -24,12 +24,12 @@ pizza = %{
 Suppose you want to specify a bunch of these that share many things
 but also diverge in many particulars. Rather than writing that sort
 of thing over and over, it would be easier and more resistant to 
-errors and the ravages of time if you could just do this:
+errors and the ravages of time if you could just do something like this:
 
 ```elixir
 %{
   protos: ["spinach_deep_dish", "size_large", "cornmeal_crust"]
-  toppings: ["spinach", "giardiniera"]
+  toppings: ["spinach", "left-hot-giardiniera"]
   order: %{
     type: "pickup",
     placed_at: "19:30PM CST"
@@ -38,10 +38,26 @@ errors and the ravages of time if you could just do this:
 }
 ```
 
-Here `protos` is shorthand for "prototypes": i.e., data that we 
+Here `protos` is shorthand for "prototypes": i.e., data that we
 want to pull in, include, etc. Proton will expand those names into
 actual maps, (along with any prototypes _they_ specify) flatten the
-list, and merge them into a single data structure for you. The benefits
+list, and merge them into a single data structure for you. 
+
+Note: "Toppings" works that way too in this example, like a one-to-many
+relationship, though you'll have to expand those explicitly; Proton
+doesn't handle that for you. It's just a significant enough part
+of all the real world use cases I've come up with that it seemed
+reasonable to illustrate it. If we were talking about blog posts,
+"tags" might be a good case: You specify a list of tags as strings,
+and then use Proton to expand those into more intelligent entities
+that include, say, a URL for a semantic purposes.
+
+
+
+
+
+
+The benefits
 are:
 
 - Encapsulation: The first example above, where the pizza order is

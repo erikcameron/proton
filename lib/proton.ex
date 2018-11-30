@@ -7,7 +7,7 @@ defmodule Proton do
 
   def build(path, finder, options \\ [])
   def build(literal, _, _) when is_map(literal), do: literal
-  def build(path, finder, options) do
+  def build(path, finder, options) when is_function(finder) do
     with {:ok, expanded_protos } <- expand(path, finder),
       {:ok, unfiltered_spec } <- merge_protos(expanded_protos),
       {:ok, filtered_spec} <- filter(unfiltered_spec, options[:filter]),
